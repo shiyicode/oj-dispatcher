@@ -3,18 +3,18 @@ package apiv1
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/open-fightcoder/oj-dispatcher/router/controllers/baseController"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLogin(t *testing.T) {
 	resp, err := http.Post("http://127.0.0.1:8000/apiv1/account/login",
 		"application/x-www-form-urlencoded",
-		strings.NewReader("email=abcd.com&password=asdf"))
+		strings.NewReader("email=asdfr.com&password=asdfr"))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -26,7 +26,7 @@ func TestLogin(t *testing.T) {
 		fmt.Println(err)
 	}
 
-	var respT baseController.HttpResponse
+	var respT basecontroller.HttpResponse
 	if err := json.Unmarshal(body, &respT); err != nil {
 		fmt.Println(err)
 	}
@@ -36,7 +36,7 @@ func TestLogin(t *testing.T) {
 func TestRegister(t *testing.T) {
 	resp, err := http.Post("http://127.0.0.1:8000/apiv1/account/register",
 		"application/x-www-form-urlencoded",
-		strings.NewReader("email=abcd.com&password=asdf"))
+		strings.NewReader("email=asdfr.com&password=asdfr"))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -47,7 +47,7 @@ func TestRegister(t *testing.T) {
 		fmt.Println(err)
 	}
 
-	var respT baseController.HttpResponse
+	var respT basecontroller.HttpResponse
 	if err := json.Unmarshal(body, &respT); err != nil {
 		fmt.Println(err)
 	}

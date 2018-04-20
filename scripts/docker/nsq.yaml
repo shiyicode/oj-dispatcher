@@ -1,0 +1,25 @@
+version: '3'
+services:
+  nsqlookupd:
+    image: nsqio/nsq
+    command: /nsqlookupd
+    ports:
+      - "4160:4160"
+      - "9001:4161"
+  nsqd:
+    image: nsqio/nsq
+    command: /nsqd -broadcast-address="xupt2.fightcoder.com" --tcp-address="0.0.0.0:9002" --http-address="0.0.0.0:9003" --lookupd-tcp-address=nsqlookupd:4160
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "9002:9002"
+      - "9003:9003"
+  nsqadmin:
+    image: nsqio/nsq
+    command: /nsqadmin --lookupd-http-address=nsqlookupd:4161
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "9000:4171"
+    links:
+      - nsqd:xupt2.fightcoder.com

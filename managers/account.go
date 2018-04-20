@@ -33,7 +33,7 @@ func AccountRegister(email, password string) (bool, int64, string) {
 		return false, 0, "Email is exist"
 	}
 	account = &models.Account{Email: email, Password: md5Encode(password)}
-	if insertId, err := (models.Account{}).Add(account); err != nil {
+	if insertId, err := models.AccountAdd(account); err != nil {
 		panic(err.Error())
 	} else {
 		return true, insertId, ""
@@ -41,7 +41,7 @@ func AccountRegister(email, password string) (bool, int64, string) {
 }
 
 func getAccountByEmail(email string) *models.Account {
-	account, err := models.Account{}.GetByEmail(email)
+	account, err := models.AccountGetByEmail(email)
 	if err != nil {
 		panic(err.Error())
 	}

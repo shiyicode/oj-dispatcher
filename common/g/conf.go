@@ -48,7 +48,7 @@ type NsqConfig struct {
 	Lookupds     []string `toml:"lookupds"`
 	JudgeTopic   string   `toml:"judgeTopic"`
 	JudgeChannel string   `toml:"judgeChannel"`
-	HandlerCount int      `toml:"handlerCount"`
+	MaxInFlight  int      `toml:"maxInFlight"`
 }
 
 var (

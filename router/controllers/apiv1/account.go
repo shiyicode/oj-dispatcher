@@ -6,7 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/open-fightcoder/oj-dispatcher/managers"
-	"github.com/open-fightcoder/oj-dispatcher/router/controllers/baseController"
+	"github.com/open-fightcoder/oj-dispatcher/models"
+	"github.com/open-fightcoder/oj-dispatcher/router/controllers/base"
 )
 
 func RegisterAccount(router *gin.RouterGroup) {
@@ -15,10 +16,13 @@ func RegisterAccount(router *gin.RouterGroup) {
 }
 
 func httpHandlerLogin(c *gin.Context) {
-	email := c.PostForm("email")
-	password := c.PostForm("password")
-	if flag, token, mess := managers.AccountLogin(email, password); flag == false {
-		c.JSON(http.StatusOK, (&baseController.Base{}).Fail(mess))
+	account := models.Account{}
+	err := c.Bind(&account)
+	if err != nil {
+		panic(err)
+	}
+	if flag, token, mess := managers.AccountLogin(account.Email, account.Password); flag == false {
+		c.JSON(http.StatusOK, base.Fail(mess))
 	} else {
 		cookie := &http.Cookie{
 			Name:     "token",
@@ -27,16 +31,19 @@ func httpHandlerLogin(c *gin.Context) {
 			HttpOnly: true,
 		}
 		http.SetCookie(c.Writer, cookie)
-		c.JSON(http.StatusOK, (&baseController.Base{}).Success())
+		c.JSON(http.StatusOK, base.Success())
 	}
 }
 
 func httpHandlerRegister(c *gin.Context) {
-	email := c.PostForm("email")
-	password := c.PostForm("password")
-	if flag, userId, mess := managers.AccountRegister(email, password); flag == false {
-		c.JSON(http.StatusOK, (&baseController.Base{}).Fail(mess))
+	account := models.Account{}
+	err := c.Bind(&account)
+	if err != nil {
+		panic(err)
+	}
+	if flag, userId, mess := managers.AccountRegister(account.Email, account.Password); flag == false {
+		c.JSON(http.StatusOK, base.Fail(mess))
 	} else {
-		c.JSON(http.StatusOK, (&baseController.Base{}).Success(userId))
+		c.JSON(http.StatusOK, base.Success(userId))
 	}
 }

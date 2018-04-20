@@ -32,6 +32,7 @@ func NewConsumer() (*Consumer, error) {
 	consumer := new(Consumer)
 
 	consumer.NsqCfg = nsq.NewConfig()
+	consumer.NsqCfg.MaxInFlight = g.Conf().Nsq.MaxInFlight
 	consumer.Topic = g.Conf().Nsq.JudgeTopic
 	consumer.Channel = g.Conf().Nsq.JudgeChannel
 

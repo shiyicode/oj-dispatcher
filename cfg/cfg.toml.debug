@@ -26,4 +26,4 @@ maxEffectiveTime = 3  # 最大存活时间:天
 lookupds = ["xupt2.fightcoder.com:9001"]
 judgeTopic = "realJudge"
 judgeChannel = "x"
-handlerCount = 5
+maxInFlight = 10   #最大允许向n台nsqd接收数据
