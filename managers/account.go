@@ -19,7 +19,7 @@ func AccountLogin(email, password string) (bool, string, string) {
 	} else {
 		//TODO
 		userId := 1
-		if token, err := components.CreateToken(userId); err != nil {
+		if token, err := components.CreateToken(int64(userId)); err != nil {
 			panic(err.Error())
 		} else {
 			return true, token, ""

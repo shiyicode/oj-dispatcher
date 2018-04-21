@@ -1,11 +1,13 @@
 package dispatcher
 
-import "fmt"
+import (
+	"github.com/open-fightcoder/oj-dispatcher/judger"
+)
 
 type Worker struct {
 	JobChannel JobChan       // 用于接收job
 	quit       chan struct{} // 用于接收停止信号
-	workerPool WorkerChan    // worker池
+	judger     *judger.Judger
 }
 
 // worker里面需要包含docker相关
@@ -14,24 +16,24 @@ type Worker struct {
 // 开始任务前，进行检测docker是否可用，不可用即销毁并重新生成  reCreate
 // 任务结束时，如果不可用，即销毁容器
 
-func NewWorker(workPool WorkerChan) Worker {
-	return Worker{
-		JobChannel: make(chan Job),
-		quit:       make(chan struct{})}
+func NewWorker() *Worker {
+	worker := new(Worker)
+	worker.JobChannel = make(chan *judger.Job)
+	worker.quit = make(chan struct{})
+	worker.judger = judger.NewJudger()
+
+	return worker
 }
 
 func (w *Worker) Start() {
 	go func() {
 		for {
 			// 将任务接收队列放入worker池
-			w.workerPool <- w.JobChannel
+			workerPool <- w.JobChannel
 			select {
 			// 接收到了任务
 			case job := <-w.JobChannel:
-				if err := job.Do(); err != nil {
-					fmt.Printf("excute job failed with err: %v", err)
-					// 任务失败，删除docker，重新建立docker
-				}
+				w.judger.Do(job)
 
 			case <-w.quit:
 				return
@@ -41,7 +43,6 @@ func (w *Worker) Start() {
 }
 
 func (w *Worker) Stop() {
-	go func() {
-		w.quit <- struct{}{}
-	}()
+	w.quit <- struct{}{}
+	w.judger.DropDocker()
 }

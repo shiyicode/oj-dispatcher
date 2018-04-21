@@ -11,7 +11,7 @@ import (
 
 var mySigningKey = "let's to change the world!"
 
-func CreateToken(userId int) (string, error) {
+func CreateToken(userId int64) (string, error) {
 	cfg := g.Conf()
 	claims := jwt.MapClaims{
 		"uid": userId,

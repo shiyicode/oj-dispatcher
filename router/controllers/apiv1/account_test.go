@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/open-fightcoder/oj-dispatcher/router/controllers/base"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -26,7 +27,7 @@ func TestLogin(t *testing.T) {
 		fmt.Println(err)
 	}
 
-	var respT basecontroller.HttpResponse
+	var respT base.HttpResponse
 	if err := json.Unmarshal(body, &respT); err != nil {
 		fmt.Println(err)
 	}
@@ -47,7 +48,7 @@ func TestRegister(t *testing.T) {
 		fmt.Println(err)
 	}
 
-	var respT basecontroller.HttpResponse
+	var respT base.HttpResponse
 	if err := json.Unmarshal(body, &respT); err != nil {
 		fmt.Println(err)
 	}

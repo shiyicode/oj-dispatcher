@@ -1,44 +1,53 @@
 package dispatcher
 
-type Job interface {
-	Do() error
-}
-type JobChan chan Job        // 任务队列
-type WorkerChan chan JobChan // worker池
+import "github.com/open-fightcoder/oj-dispatcher/judger"
 
-type Dispatcher struct {
+type JobChan chan *judger.Job // 任务队列
+type WorkerChan chan JobChan  // worker池
+
+var (
+	quit       chan struct{} // 用于接收停止信号
 	workerPool WorkerChan
 	jobQueue   JobChan
-	maxWorkers int
-	maxJobs    int
-}
+	workers    []*Worker
+)
 
-func NewDispatcher(maxWorkers int, maxJobs int) *Dispatcher {
-	pool := make(WorkerChan, maxWorkers)
-	return &Dispatcher{workerPool: pool}
-}
+func Start(maxWorkers int, maxJobs int) {
+	workerPool = make(WorkerChan, maxWorkers)
+	workers = make([]*Worker, maxWorkers)
+	jobQueue = make(JobChan, maxJobs)
 
-func (d *Dispatcher) Run() {
-	for i := 0; i < d.maxWorkers; i++ {
-		worker := NewWorker(d.workerPool)
+	for i := 0; i < maxWorkers; i++ {
+		worker := NewWorker()
+		workers = append(workers, worker)
 		worker.Start()
 	}
 
-	go d.dispatch()
+	go dispatch()
 }
 
-func (d *Dispatcher) AddJob(job Job) {
-
+func Stop() {
+	quit <- struct{}{}
+	for _, worker := range workers {
+		worker.Stop()
+	}
 }
 
-func (d *Dispatcher) dispatch() {
+func AddJob(job *judger.Job) {
+	jobQueue <- job
+}
+
+func dispatch() {
 	for {
 		select {
-		case job := <-d.jobQueue:
-			go func(job Job) {
-				jobChannel := <-d.workerPool
+		case job := <-jobQueue:
+			go func(job *judger.Job) {
+				jobChannel := <-workerPool
 				jobChannel <- job
 			}(job)
+
+		case <-quit:
+			return
 		}
 	}
 }

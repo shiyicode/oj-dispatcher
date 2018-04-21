@@ -7,7 +7,6 @@ import (
 	"math/rand"
 	"testing"
 	"time"
-
 	"github.com/nsqio/go-nsq"
 )
 

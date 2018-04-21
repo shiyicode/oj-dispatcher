@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/open-fightcoder/oj-dispatcher/managers"
-	"github.com/open-fightcoder/oj-dispatcher/models"
 	"github.com/open-fightcoder/oj-dispatcher/router/controllers/base"
 )
 
@@ -15,8 +14,13 @@ func RegisterAccount(router *gin.RouterGroup) {
 	router.POST("account/register", httpHandlerRegister)
 }
 
+type AccountParam struct {
+	Email    string `form:"email" json:"email" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required"`
+}
+
 func httpHandlerLogin(c *gin.Context) {
-	account := models.Account{}
+	account := AccountParam{}
 	err := c.Bind(&account)
 	if err != nil {
 		panic(err)
@@ -36,7 +40,7 @@ func httpHandlerLogin(c *gin.Context) {
 }
 
 func httpHandlerRegister(c *gin.Context) {
-	account := models.Account{}
+	account := AccountParam{}
 	err := c.Bind(&account)
 	if err != nil {
 		panic(err)
