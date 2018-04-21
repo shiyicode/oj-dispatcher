@@ -1,1 +1,1 @@
-# oj-web
+# oj-dispatcher
