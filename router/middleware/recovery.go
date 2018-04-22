@@ -1,6 +1,3 @@
-// Copyright 2014 Manu Martinez-Almeida.  All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
 package middleware
 
 import (
@@ -21,7 +18,6 @@ var (
 	slash     = []byte("/")
 )
 
-// Recovery returns a middleware that recovers from any panics and writes a 500 if there was one.
 func Recovery() gin.HandlerFunc {
 	reset := string([]byte{27, 91, 48, 109})
 
@@ -30,7 +26,7 @@ func Recovery() gin.HandlerFunc {
 			if err := recover(); err != nil {
 				stack := stack(3)
 				httprequest, _ := httputil.DumpRequest(c.Request, false)
-				log.Panic("[Recovery] panic recovered:\n%s\n%s\n%s%s", string(httprequest), err, stack, reset)
+				log.Errorf("[Recovery] panic recovered:\n%s\n%s\n%s%s", string(httprequest), err, string(stack), reset)
 				c.AbortWithStatus(500)
 			}
 		}()

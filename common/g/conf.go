@@ -27,7 +27,6 @@ type RunConfig struct {
 type LogConfig struct {
 	Enable    bool   `toml:"enable"`
 	Path      string `toml:"path"`
-	Level     string `toml:"level"`
 	RotatTime int    `toml:"rotatTime"`
 	MaxAge    int    `toml:"maxAge"`
 }

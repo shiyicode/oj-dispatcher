@@ -10,13 +10,13 @@ import (
 )
 
 func RegisterAccount(router *gin.RouterGroup) {
-	router.POST("account/login", httpHandlerLogin)
-	router.POST("account/register", httpHandlerRegister)
+	router.POST("login", httpHandlerLogin)
+	router.POST("register", httpHandlerRegister)
 }
 
 type AccountParam struct {
-	Email    string `form:"email" json:"email" binding:"required"`
-	Password string `form:"password" json:"password" binding:"required"`
+	Email    string `form:"email" json:"email"`
+	Password string `form:"password" json:"password"`
 }
 
 func httpHandlerLogin(c *gin.Context) {
@@ -25,18 +25,20 @@ func httpHandlerLogin(c *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
-	if flag, token, mess := managers.AccountLogin(account.Email, account.Password); flag == false {
-		c.JSON(http.StatusOK, base.Fail(mess))
-	} else {
-		cookie := &http.Cookie{
-			Name:     "token",
-			Value:    base64.StdEncoding.EncodeToString([]byte(token)),
-			Path:     "/",
-			HttpOnly: true,
-		}
-		http.SetCookie(c.Writer, cookie)
-		c.JSON(http.StatusOK, base.Success())
+	token, err := managers.AccountLogin(account.Email, account.Password)
+	if err != nil {
+		c.JSON(http.StatusOK, base.Fail(err.Error()))
+		return
 	}
+	cookie := &http.Cookie{
+		Name:     "token",
+		Value:    base64.StdEncoding.EncodeToString([]byte(token)),
+		Path:     "/",
+		HttpOnly: true,
+	}
+
+	http.SetCookie(c.Writer, cookie)
+	c.JSON(http.StatusOK, base.Success())
 }
 
 func httpHandlerRegister(c *gin.Context) {
@@ -45,9 +47,10 @@ func httpHandlerRegister(c *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
-	if flag, userId, mess := managers.AccountRegister(account.Email, account.Password); flag == false {
-		c.JSON(http.StatusOK, base.Fail(mess))
-	} else {
-		c.JSON(http.StatusOK, base.Success(userId))
+	userId, err := managers.AccountRegister(account.Email, account.Password)
+	if err != nil {
+		c.JSON(http.StatusOK, base.Fail(err.Error()))
+		return
 	}
+	c.JSON(http.StatusOK, base.Success(userId))
 }

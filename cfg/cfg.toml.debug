@@ -1,21 +1,20 @@
 [run]
-waitTimeout = 0
-httpPort = 9001
-mode = 'debug'
-maxAllowed = 5
+waitTimeout = 0 # 优雅退出等待时间
+httpPort = 9001 # 端口
+mode = 'debug'  # gin运行模式
+maxAllowed = 5  # 最大请求量
 
 [log]
-enable = true
-path = "./logs"
-level = "debug"
+enable = false  # 是否启动输出到文件
+path = "./logs" # 日志路径
 rotatTime = 1   # 日志切割时间间隔：1天
 maxAge = 30     # 文件最大保存时间：30天
 
 [mysql]
 maxIdle = 5      # 最大空闲连接数
 maxOpen = 10     # 最大打开连接数
-debug = false
-#webAddr = "root:123456@tcp(xupt4.fightcoder.com:9000)/fightcoder?charset=utf8&loc=Asia%2FShanghai&parseTime=true&wait_timeout=3600"
+debug = false    # 模式
+
 webAddr = "root:123456@tcp(localhost:3306)/fightcoder?charset=utf8&loc=Asia%2FShanghai&parseTime=true&wait_timeout=3600"
 
 [jwt]
@@ -24,6 +23,6 @@ maxEffectiveTime = 3  # 最大存活时间:天
 
 [nsq]
 lookupds = ["xupt2.fightcoder.com:9001"]
-judgeTopic = "realJudge"
+judgeTopic = "judge"
 judgeChannel = "x"
 maxInFlight = 10   #最大允许向n台nsqd接收数据

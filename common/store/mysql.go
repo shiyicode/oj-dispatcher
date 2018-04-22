@@ -1,6 +1,8 @@
 package store
 
 import (
+	"time"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/core"
 	"github.com/go-xorm/xorm"
@@ -31,6 +33,11 @@ func InitMysql() {
 			OrmWeb.ShowExecTime(true)
 			OrmWeb.Logger().SetLevel(core.LOG_DEBUG)
 		} else {
+			logPath := conf.Log.Path
+			maxAge := time.Duration(conf.Log.MaxAge)
+			rotationTime := time.Duration(conf.Log.RotatTime)
+			writer := g.GetLogWriter(logPath, "xorm", maxAge, rotationTime)
+			OrmWeb.SetLogger(xorm.NewSimpleLogger(writer))
 			OrmWeb.Logger().SetLevel(core.LOG_WARNING)
 		}
 	}

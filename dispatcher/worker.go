@@ -2,7 +2,6 @@ package dispatcher
 
 import (
 	"github.com/open-fightcoder/oj-dispatcher/judger"
-	log "github.com/sirupsen/logrus"
 )
 
 type Worker struct {
@@ -46,5 +45,4 @@ func (w *Worker) Start() {
 func (w *Worker) Stop() {
 	w.quit <- struct{}{}
 	w.judger.DropDocker()
-	log.Info("dispatcher stoped")
 }

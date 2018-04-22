@@ -5,4 +5,5 @@ import (
 )
 
 func Register(router *gin.RouterGroup) {
+	RegisterAccount(router)
 }

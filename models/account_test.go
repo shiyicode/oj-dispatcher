@@ -46,7 +46,7 @@ func TestAccountGetById(t *testing.T) {
 func TestAccountGetByEmail(t *testing.T) {
 	InitAllInTest()
 
-	account := &Account{Email: "bbb@qq.com", Password: "123", Phone: "1234", QqId: "1"}
+	account := &Account{Email: "xxx@qq.com", Password: "123", Phone: "1234", QqId: "1"}
 	AccountAdd(account)
 
 	getAccount, err := AccountGetByEmail(account.Email)

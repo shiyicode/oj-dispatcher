@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/open-fightcoder/oj-dispatcher/common/components"
+	"github.com/open-fightcoder/oj-dispatcher/router/controllers/base"
 )
 
 func Auth() gin.HandlerFunc {
@@ -22,8 +23,9 @@ func Auth() gin.HandlerFunc {
 			if flag, userId := components.RequireTokenAuthentication(token); flag == true {
 				c.Set("userId", userId)
 				c.Next()
+				return
 			}
 		}
-		c.JSON(http.StatusForbidden, "authv1 failure")
+		c.AbortWithStatusJSON(http.StatusForbidden, base.Fail("auth failure."))
 	}
 }

@@ -28,9 +28,8 @@ func main() {
 
 	// 启动调度者
 	dispatcher.Start(runtime.NumCPU(), runtime.NumCPU())
-
 	// 启动消费者
-	comsumer.Start()
+	consumer.Start()
 
 	// 优雅退出
 	graceful.LogListenAndServe(&http.Server{
@@ -38,7 +37,7 @@ func main() {
 		Handler: router,
 	})
 
-	comsumer.Stop()
+	consumer.Stop()
 	dispatcher.Stop()
 	common.Close()
 }

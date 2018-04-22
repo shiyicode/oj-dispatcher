@@ -1,15 +1,13 @@
 package g
 
 import (
-	"os"
-	"path"
-	"time"
-
 	"io"
-
+	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/lestrrat-go/file-rotatelogs"
 	"github.com/rifflock/lfshook"
@@ -37,24 +35,24 @@ func InitLog() {
 	maxAge := time.Duration(conf.Log.MaxAge)
 	rotationTime := time.Duration(conf.Log.RotatTime)
 	lfhook := lfshook.NewHook(lfshook.WriterMap{
-		log.DebugLevel: getWriter(logPath, "debug", maxAge, rotationTime),
-		log.InfoLevel:  getWriter(logPath, "info", maxAge, rotationTime),
-		log.WarnLevel:  getWriter(logPath, "warn", maxAge, rotationTime),
-		log.ErrorLevel: getWriter(logPath, "error", maxAge, rotationTime),
-		log.FatalLevel: getWriter(logPath, "fatal", maxAge, rotationTime),
-		log.PanicLevel: getWriter(logPath, "panic", maxAge, rotationTime),
+		log.DebugLevel: GetLogWriter(logPath, "debug", maxAge, rotationTime),
+		log.InfoLevel:  GetLogWriter(logPath, "info", maxAge, rotationTime),
+		log.WarnLevel:  GetLogWriter(logPath, "warn", maxAge, rotationTime),
+		log.ErrorLevel: GetLogWriter(logPath, "error", maxAge, rotationTime),
+		log.FatalLevel: GetLogWriter(logPath, "fatal", maxAge, rotationTime),
+		log.PanicLevel: GetLogWriter(logPath, "panic", maxAge, rotationTime),
 	}, &log.TextFormatter{ForceColors: true})
 	log.AddHook(lfhook)
 }
 
-func getWriter(logPath string, logFileName string, maxAge time.Duration, rotationTime time.Duration) io.Writer {
+func GetLogWriter(logPath string, logFileName string, maxAge time.Duration, rotationTime time.Duration) io.Writer {
 	path := path.Join(getCurrPath(), logPath, logFileName)
 
 	writer, err := rotatelogs.New(
-		path+".%Y%m%d%H%M.log",
+		path+".%Y%m%d.log",
 		rotatelogs.WithLinkName(path),
-		rotatelogs.WithMaxAge(maxAge*time.Hour),
-		rotatelogs.WithRotationTime(rotationTime*time.Hour),
+		rotatelogs.WithMaxAge(maxAge*24*time.Hour),
+		rotatelogs.WithRotationTime(rotationTime*24*time.Hour),
 	)
 	if err != nil {
 		return nil

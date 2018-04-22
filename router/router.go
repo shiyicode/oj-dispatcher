@@ -24,8 +24,10 @@ func GetRouter() *gin.Engine {
 
 // 初始化路由
 func initRouter() {
-	router = gin.Default()
+	router = gin.New()
+	gin.SetMode(g.Conf().Run.Mode)
 
+	router.Use(middleware.Logger())
 	router.Use(middleware.Cors())
 	router.Use(middleware.Recovery())
 	router.Use(middleware.MaxAllowed(g.Conf().Run.MaxAllowed))
