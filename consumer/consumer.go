@@ -1,8 +1,9 @@
-package comsumer
+package consumer
 
 import (
 	"github.com/nsqio/go-nsq"
 	"github.com/open-fightcoder/oj-dispatcher/common/g"
+	log "github.com/sirupsen/logrus"
 )
 
 type Consumer struct {
@@ -15,9 +16,12 @@ type Consumer struct {
 var consumers []*Consumer
 
 func Start() {
-	consumer, err := NewConsumer()
+	consumer, err := newConsumer()
 	if err != nil {
-		panic(err)
+		log.WithFields(log.Fields{
+			"error": err,
+		}).Panic("consumer start failure")
+
 	}
 	consumers = append(consumers, consumer)
 }
@@ -28,7 +32,7 @@ func Stop() {
 	}
 }
 
-func NewConsumer() (*Consumer, error) {
+func newConsumer() (*Consumer, error) {
 	consumer := new(Consumer)
 
 	consumer.NsqCfg = nsq.NewConfig()

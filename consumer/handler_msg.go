@@ -1,4 +1,4 @@
-package comsumer
+package consumer
 
 import (
 	"encoding/json"
@@ -14,11 +14,14 @@ type Handler struct {
 }
 
 func (this *Handler) HandleMessage(m *nsq.Message) error {
-	log.Infof("HandbleMessage: ", string(m.Body))
+	log.Infof("HandleMessage: ", string(m.Body))
 
 	job := new(judger.Job)
 	if err := json.Unmarshal(m.Body, job); err != nil {
-		log.Errorf("unmarshal JudgerData from NsqMessage failed, err: %v, event:%s", err, m.Body)
+		log.WithFields(log.Fields{
+			"error":   err,
+			"message": m.Body,
+		}).Error("unmarshal job from NsqMessage failed")
 		return nil
 	}
 

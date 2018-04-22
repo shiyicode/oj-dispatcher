@@ -1,8 +1,12 @@
 package judger
 
+import (
+	"fmt"
+)
+
 const (
 	SUBMITTYPE_TEST = "test"
-	SUBMITTYPE_REAL = "real"
+	SUBMITTYPE_DEFA = "default"
 	SUBMITTYPE_SPEC = "special"
 )
 
@@ -23,13 +27,14 @@ func NewJudger() *Judger {
 }
 
 func (j *Judger) CreateDocker() {
-
+	//time.Sleep(6 * time.Second)
 }
 
 // TODO 用API超时来决定是否任务失败
 func (j *Judger) Do(job *Job) {
+	fmt.Println("Do Judger ", job.SubmitType)
 	switch job.SubmitType {
-	case SUBMITTYPE_REAL:
+	case SUBMITTYPE_DEFA:
 
 	case SUBMITTYPE_SPEC:
 	case SUBMITTYPE_TEST:
