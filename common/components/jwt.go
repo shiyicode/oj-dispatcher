@@ -4,16 +4,18 @@ import (
 	"fmt"
 	"time"
 
+	"strconv"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/open-fightcoder/oj-dispatcher/common/g"
 )
 
 var mySigningKey = "let's to change the world!"
 
-func CreateToken(userId int) (string, error) {
+func CreateToken(userId int64) (string, error) {
 	cfg := g.Conf()
 	claims := jwt.MapClaims{
-		"uid": userId,
+		"uid": strconv.FormatInt(userId, 10),
 		"exp": time.Now().Add(time.Hour * 24 * time.Duration(cfg.Jwt.MaxEffectiveTime)).Unix(),
 	}
 
