@@ -19,12 +19,12 @@ func TestSendMessDefault(t *testing.T) {
 }
 
 func TestSendMessSepcial(t *testing.T) {
-	mess := SendMess{SubmitType: judger.SUBMITTYPE_SPEC, SubmitId: 1}
+	mess := SendMess{SubmitType: judger.SUBMITTYPE_SPEC, SubmitId: 2}
 	Nsq{}.send(mess)
 }
 
 func TestSendMessTest(t *testing.T) {
-	mess := SendMess{SubmitType: judger.SUBMITTYPE_TEST, SubmitId: 1}
+	mess := SendMess{SubmitType: judger.SUBMITTYPE_TEST, SubmitId: 3}
 	Nsq{}.send(mess)
 }
 

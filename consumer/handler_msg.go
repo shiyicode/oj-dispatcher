@@ -14,7 +14,7 @@ type Handler struct {
 }
 
 func (this *Handler) HandleMessage(m *nsq.Message) error {
-	log.Infof("HandleMessage: ", string(m.Body))
+	//log.Infof("HandleMessage: ", string(m.Body))
 
 	job := new(judger.Job)
 	if err := json.Unmarshal(m.Body, job); err != nil {
@@ -25,7 +25,7 @@ func (this *Handler) HandleMessage(m *nsq.Message) error {
 		return nil
 	}
 
-	log.Infof("consume Message from dispatch: %#v", job)
+	//log.Infof("consume Message from dispatch: %#v", job)
 
 	dispatcher.AddJob(job)
 

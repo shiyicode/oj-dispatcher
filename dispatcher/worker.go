@@ -5,9 +5,10 @@ import (
 )
 
 type Worker struct {
-	JobChannel JobChan       // 用于接收job
-	quit       chan struct{} // 用于接收停止信号
-	judger     *judger.Judger
+	JobChannel JobChan        // 用于接收job
+	quit       chan struct{}  // 用于接收停止信号
+	judger     *judger.Judger // 判题实例
+	id         int            // 编号
 }
 
 // worker里面需要包含docker相关
@@ -16,12 +17,12 @@ type Worker struct {
 // 开始任务前，进行检测docker是否可用，不可用即销毁并重新生成  reCreate
 // 任务结束时，如果不可用，即销毁容器
 
-func NewWorker() *Worker {
+func NewWorker(id int) *Worker {
 	worker := new(Worker)
 	worker.JobChannel = make(chan *judger.Job)
 	worker.quit = make(chan struct{})
 	worker.judger = judger.NewJudger()
-
+	worker.id = id
 	return worker
 }
 

@@ -1,6 +1,8 @@
 package dispatcher
 
 import (
+	"fmt"
+
 	"github.com/open-fightcoder/oj-dispatcher/judger"
 )
 
@@ -15,13 +17,14 @@ var (
 )
 
 func Start(maxWorkers int, maxJobs int) {
+	fmt.Println(maxWorkers, maxJobs)
 	workerPool = make(WorkerChan, maxWorkers)
 	workers = make([]*Worker, 0)
 	jobQueue = make(JobChan, maxJobs)
 	quit = make(chan struct{})
 
 	for i := 0; i < maxWorkers; i++ {
-		worker := NewWorker()
+		worker := NewWorker(i + 1)
 		workers = append(workers, worker)
 		worker.Start()
 	}

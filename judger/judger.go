@@ -2,6 +2,7 @@ package judger
 
 import (
 	"fmt"
+	"time"
 )
 
 const (
@@ -11,8 +12,8 @@ const (
 )
 
 type Job struct {
-	SubmitType string
-	SubmitId   int64
+	SubmitType string `json:"submit_type"`
+	SubmitId   int64  `json:"submit_id"`
 }
 
 type Judger struct {
@@ -27,37 +28,41 @@ func NewJudger() *Judger {
 }
 
 func (j *Judger) CreateDocker() {
-	//time.Sleep(6 * time.Second)
+	fmt.Println("创建docker")
 }
 
 // TODO 用API超时来决定是否任务失败
 func (j *Judger) Do(job *Job) {
-	fmt.Println("Do Judger ", job.SubmitType)
 	switch job.SubmitType {
 	case SUBMITTYPE_DEFA:
-
+		j.doDefa(job.SubmitId)
 	case SUBMITTYPE_SPEC:
+		j.doSpec(job.SubmitId)
 	case SUBMITTYPE_TEST:
+		j.doTest(job.SubmitId)
 	default:
 		panic("not ")
 	}
 }
 
-func doReal(submitId int64) {
-
+func (j *Judger) doDefa(submitId int64) {
+	time.Sleep(10 * time.Second)
+	fmt.Println("dodefa")
 }
 
-func doTest(submitId int64) {
-
+func (j *Judger) doTest(submitId int64) {
+	time.Sleep(10 * time.Second)
+	fmt.Println("dotest")
 }
 
-func doSpec(submitId int64) {
-
+func (j *Judger) doSpec(submitId int64) {
+	time.Sleep(10 * time.Second)
+	fmt.Println("dospec")
 }
 
 // 删除容器
 func (j *Judger) DropDocker() {
-
+	fmt.Println("删除容器")
 }
 
 func (j *Judger) checkHealth() bool {
