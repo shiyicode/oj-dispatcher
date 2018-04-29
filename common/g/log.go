@@ -17,7 +17,7 @@ import (
 func InitLog() {
 	conf := Conf()
 	if !conf.Log.Enable {
-		log.Info("log to std err")
+		log.Print("log to std err")
 		log.SetOutput(os.Stdout)
 		log.SetLevel(log.DebugLevel)
 		return

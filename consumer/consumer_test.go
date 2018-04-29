@@ -14,7 +14,7 @@ import (
 const topic = "judge"
 
 func TestSendMessDefault(t *testing.T) {
-	mess := SendMess{SubmitType: judger.SUBMITTYPE_DEFA, SubmitId: 4}
+	mess := SendMess{SubmitType: judger.SUBMITTYPE_DEFA, SubmitId: 1}
 	Nsq{}.send(mess)
 }
 
