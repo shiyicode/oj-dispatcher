@@ -21,7 +21,7 @@ func NewWorker(id int) *Worker {
 	worker := new(Worker)
 	worker.JobChannel = make(chan *judger.Job)
 	worker.quit = make(chan struct{})
-	worker.judger = judger.NewJudger()
+	worker.judger = judger.NewJudger(id)
 	worker.id = id
 	return worker
 }

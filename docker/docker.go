@@ -9,6 +9,7 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
+	"github.com/docker/go-connections/nat"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -20,7 +21,7 @@ func newClient() (*client.Client, error) {
 	return cli, err
 }
 
-func CreateContainer(image string, cmd []string) (string, error) {
+func CreateContainer(image string, cmd []string, bindPort string) (string, error) {
 	cli, err := newClient()
 	if err != nil {
 		return "", err
@@ -31,11 +32,23 @@ func CreateContainer(image string, cmd []string) (string, error) {
 			Image: image,
 			Cmd:   cmd,
 			User:  "root",
+			ExposedPorts: nat.PortSet{
+				nat.Port(bindPort + "/tcp"): struct{}{},
+			},
 		}, &container.HostConfig{
 			Resources: container.Resources{
 				NanoCPUs: 2,
 				Memory:   512000000,
 			},
+			PortBindings: nat.PortMap{
+				nat.Port(bindPort + "/tcp"): []nat.PortBinding{
+					{
+						HostIP:   "0.0.0.0",
+						HostPort: "9000"},
+				},
+			},
+			//NetworkMode:  container.NetworkMode("host"),
+			//AutoRemove:  true,
 		}, nil, "")
 	if err != nil {
 		log.WithField("err", err.Error()).Error("docker container create failure")

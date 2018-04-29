@@ -10,6 +10,14 @@
 			"notests": true
 		},
 		{
+			"importpath": "github.com/Microsoft/go-winio",
+			"repository": "https://github.com/Microsoft/go-winio",
+			"vcs": "git",
+			"revision": "7da180ee92d8bd8bb8c37fc560e673e6557c392f",
+			"branch": "master",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/PuerkitoBio/goquery",
 			"repository": "https://github.com/PuerkitoBio/goquery",
 			"vcs": "git",
@@ -2121,6 +2129,33 @@
 			"notests": true
 		},
 		{
+			"importpath": "github.com/docker/go-connections/nat",
+			"repository": "https://github.com/docker/go-connections",
+			"vcs": "git",
+			"revision": "7395e3f8aa162843a74ed6d48e79627d9792ac55",
+			"branch": "master",
+			"path": "/nat",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/docker/go-connections/sockets",
+			"repository": "https://github.com/docker/go-connections",
+			"vcs": "git",
+			"revision": "7395e3f8aa162843a74ed6d48e79627d9792ac55",
+			"branch": "master",
+			"path": "/sockets",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/docker/go-connections/tlsconfig",
+			"repository": "https://github.com/docker/go-connections",
+			"vcs": "git",
+			"revision": "7395e3f8aa162843a74ed6d48e79627d9792ac55",
+			"branch": "master",
+			"path": "/tlsconfig",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/gin-contrib/cors",
 			"repository": "https://github.com/gin-contrib/cors",
 			"vcs": "git",
@@ -2337,6 +2372,24 @@
 			"notests": true
 		},
 		{
+			"importpath": "golang.org/x/net/internal/socks",
+			"repository": "https://go.googlesource.com/net",
+			"vcs": "git",
+			"revision": "5f9ae10d9af5b1c89ae6904293b14b064d4ada23",
+			"branch": "master",
+			"path": "internal/socks",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/net/proxy",
+			"repository": "https://go.googlesource.com/net",
+			"vcs": "git",
+			"revision": "5f9ae10d9af5b1c89ae6904293b14b064d4ada23",
+			"branch": "master",
+			"path": "/proxy",
+			"notests": true
+		},
+		{
 			"importpath": "golang.org/x/sync/errgroup",
 			"repository": "https://go.googlesource.com/sync",
 			"vcs": "git",
@@ -2352,6 +2405,15 @@
 			"revision": "b126b21c05a91c856b027c16779c12e3bf236954",
 			"branch": "master",
 			"path": "/unix",
+			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/sys/windows",
+			"repository": "https://go.googlesource.com/sys",
+			"vcs": "git",
+			"revision": "cbbc999da32df943dac6cd71eb3ee39e1d7838b9",
+			"branch": "master",
+			"path": "/windows",
 			"notests": true
 		},
 		{

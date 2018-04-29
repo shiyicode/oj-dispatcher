@@ -1,6 +1,6 @@
 [run]
 waitTimeout = 0 # 优雅退出等待时间
-httpPort = 9001 # 端口
+httpPort = 8080 # 端口
 mode = 'debug'  # gin运行模式
 maxAllowed = 5  # 最大请求量
 
