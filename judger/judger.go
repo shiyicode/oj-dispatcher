@@ -51,8 +51,13 @@ func (j *Judger) Do(job *Job) {
 		panic("not has this submit type %s" + job.SubmitType)
 	}
 
-	if err != nil || j.checkHealth() {
+	if err != nil {
 		log.Info("重置容器，错误：", err.Error())
+		j.DropDocker()
+		j.createDocker()
+	}
+	if j.checkHealth() {
+		log.Info("重置容器，错误：check失败")
 		j.DropDocker()
 		j.createDocker()
 	}
