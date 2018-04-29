@@ -56,11 +56,11 @@ func (j *Judger) Do(job *Job) {
 		j.DropDocker()
 		j.createDocker()
 	}
-	if j.checkHealth() {
-		log.Info("重置容器，错误：check失败")
-		j.DropDocker()
-		j.createDocker()
-	}
+	//if !j.checkHealth() {
+	//	log.Info("重置容器，错误：check失败")
+	//	j.DropDocker()
+	//	j.createDocker()
+	//}
 }
 
 func (j *Judger) doDefa(submitId int64) error {
@@ -69,7 +69,7 @@ func (j *Judger) doDefa(submitId int64) error {
 		"application/x-www-form-urlencoded",
 		strings.NewReader("submit_id="+strconv.FormatInt(submitId, 10)))
 	if err != nil {
-		fmt.Println("A:", err.Error())
+		fmt.Println("请求失败:", err.Error())
 		return err
 	}
 	defer resp.Body.Close()
@@ -134,17 +134,16 @@ func (j *Judger) checkHealth() bool {
 	cli := j.getClient()
 	resp, err := cli.Get("http://127.0.0.1:" + strconv.Itoa(8000+j.id) + "/apiv1/self/health")
 	if err != nil {
-		fmt.Println("check err ", err.Error())
+		log.Println("check err ", err.Error())
 		return false
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println("ioutil err", err.Error())
+		log.Println("check err", err.Error())
 		return false
 	}
-	fmt.Println(string(body))
 	if string(body) != "ok" {
 		return false
 	}
