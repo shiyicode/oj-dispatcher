@@ -2,7 +2,7 @@
 workspace=$(cd $(dirname $0) && pwd -P)
 cd $workspace
 
-app=oj-disptcher
+app=oj-dispatcher
 cfg=cfg/cfg.toml.release
 pidfile=var/app.pid
 logfile=logs/app.log
