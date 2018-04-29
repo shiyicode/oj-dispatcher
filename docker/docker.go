@@ -37,7 +37,7 @@ func CreateContainer(image string, cmd []string, bindPort string) (string, error
 		}, &container.HostConfig{
 			Resources: container.Resources{
 				NanoCPUs: 2,
-				Memory:   524288000,
+				Memory:   52428800,
 			},
 			PortBindings: nat.PortMap{
 				"9001/tcp": []nat.PortBinding{

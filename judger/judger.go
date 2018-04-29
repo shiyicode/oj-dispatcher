@@ -37,7 +37,6 @@ func NewJudger(id int) *Judger {
 	return judger
 }
 
-// TODO 用API超时来决定是否任务失败
 func (j *Judger) Do(job *Job) {
 	var err error
 
@@ -53,6 +52,7 @@ func (j *Judger) Do(job *Job) {
 	}
 
 	if err != nil || j.checkHealth() {
+		log.Info("重置容器，错误：", err.Error())
 		j.DropDocker()
 		j.createDocker()
 	}
@@ -77,10 +77,8 @@ func (j *Judger) doDefa(submitId int64) error {
 	fmt.Println(string(body))
 	var respT base.HttpResponse
 	if err := json.Unmarshal(body, &respT); err != nil {
-		fmt.Println("C:", err.Error())
 		return err
 	}
-	fmt.Printf("%s\n", respT)
 
 	return nil
 }
@@ -98,29 +96,31 @@ func (j *Judger) doSpec(submitId int64) error {
 }
 
 func (j *Judger) createDocker() {
-	fmt.Println(j.id, "创建docker")
 	bindPort := strconv.Itoa(8000 + j.id)
 	var err error
 	j.containerId, err = docker.CreateContainer("test", []string{}, bindPort)
 	//j.containerId, err = docker.CreateContainer("shiyicode/oj-judger", []string{}, bindPort)
 	if err != nil {
-		log.Panicf("create container %s failure: ", j.containerId, err.Error())
+		log.Errorf("create container %s failure: ", j.containerId, err.Error())
 		return
 	}
-	fmt.Println(j.id, "创建docker成功")
+
+	log.Info(j.id, "创建容器", j.containerId)
 
 	err = docker.StartContainer(j.containerId)
 	if err != nil {
-		log.Panicf("start container %s failure: ", j.containerId, err.Error())
+		log.Errorf("start container %s failure: ", j.containerId, err.Error())
 	}
+
+	log.Info(j.id, "启动容器", j.containerId)
 }
 
 // 删除容器
 func (j *Judger) DropDocker() {
-	fmt.Println(j.id, "删除容器")
+	log.Info(j.id, "删除容器", j.containerId)
 	err := docker.KillContainer(j.containerId)
 	if err != nil {
-		log.Panicf("kill container %s failure: ", j.containerId, err.Error())
+		log.Errorf("kill container %s failure: ", j.containerId, err.Error())
 	}
 }
 
