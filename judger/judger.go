@@ -5,15 +5,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
-	"strconv"
-
-	"log"
-
 	"github.com/open-fightcoder/oj-dispatcher/docker"
 	"github.com/open-fightcoder/oj-dispatcher/router/controllers/base"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -60,10 +58,6 @@ func (j *Judger) Do(job *Job) {
 	}
 }
 
-const (
-	JudgerUrl = "http://127.0.0.1:9001"
-)
-
 func (j *Judger) doDefa(submitId int64) error {
 	cli := j.getClient()
 	resp, err := cli.Post("http://127.0.0.1:"+strconv.Itoa(8000+j.id)+"/apiv1/judge/default",
@@ -104,13 +98,16 @@ func (j *Judger) doSpec(submitId int64) error {
 }
 
 func (j *Judger) createDocker() {
-	fmt.Println("创建docker")
+	fmt.Println(j.id, "创建docker")
 	bindPort := strconv.Itoa(8000 + j.id)
 	var err error
-	j.containerId, err = docker.CreateContainer("shiyicode/judger", []string{}, bindPort)
+	j.containerId, err = docker.CreateContainer("test", []string{}, bindPort)
+	//j.containerId, err = docker.CreateContainer("shiyicode/oj-judger", []string{}, bindPort)
 	if err != nil {
 		log.Panicf("create container %s failure: ", j.containerId, err.Error())
+		return
 	}
+	fmt.Println(j.id, "创建docker成功")
 
 	err = docker.StartContainer(j.containerId)
 	if err != nil {
@@ -120,7 +117,7 @@ func (j *Judger) createDocker() {
 
 // 删除容器
 func (j *Judger) DropDocker() {
-	fmt.Println("删除容器")
+	fmt.Println(j.id, "删除容器")
 	err := docker.KillContainer(j.containerId)
 	if err != nil {
 		log.Panicf("kill container %s failure: ", j.containerId, err.Error())
@@ -130,7 +127,7 @@ func (j *Judger) DropDocker() {
 // 是否健康
 func (j *Judger) checkHealth() bool {
 	cli := j.getClient()
-	resp, err := cli.Get(JudgerUrl + "/apiv1/self/health")
+	resp, err := cli.Get("http://127.0.0.1:" + strconv.Itoa(8000+j.id) + "/apiv1/self/health")
 	if err != nil {
 		fmt.Println("check err ", err.Error())
 		return false
@@ -150,14 +147,9 @@ func (j *Judger) checkHealth() bool {
 	return true
 }
 
-// 销毁当前容器，创建新容器，并且写入任务的结果
-func (j *Judger) reCreateDocker() {
-
-}
-
 func (j *Judger) getClient() http.Client {
 	client := http.Client{
-		Timeout: 5 * time.Second,
+		Timeout: 30 * time.Second,
 	}
 	return client
 }
