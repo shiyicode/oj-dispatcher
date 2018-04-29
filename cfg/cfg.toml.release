@@ -15,14 +15,14 @@ maxIdle = 5      # 最大空闲连接数
 maxOpen = 10     # 最大打开连接数
 debug = false    # 模式
 
-webAddr = "root:123456@tcp(localhost:3306)/fightcoder?charset=utf8&loc=Asia%2FShanghai&parseTime=true&wait_timeout=3600"
+webAddr = "root:123456@tcp(10.0.1.214:3306)/fightcoder?charset=utf8&loc=Asia%2FShanghai&parseTime=true&wait_timeout=3600"
 
 [jwt]
 encodeMethod = "HS256" # [HS256, HS384, HS512]
 maxEffectiveTime = 3  # 最大存活时间:天
 
 [nsq]
-lookupds = ["xupt2.fightcoder.com:9001"]
+lookupds = ["10.0.1.212:9001"]
 judgeTopic = "judge"
 judgeChannel = "x"
 maxInFlight = 10   #最大允许向n台nsqd接收数据
