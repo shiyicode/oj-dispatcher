@@ -2,8 +2,8 @@
 workspace=$(cd $(dirname $0) && pwd -P)
 cd $workspace
 
-app=oj-dispatch
-conf=cfg/cfg.toml.release
+app=oj-disptcher
+cfg=cfg/cfg.toml.release
 pidfile=var/app.pid
 logfile=logs/app.log
 
@@ -22,7 +22,7 @@ function start() {
 	echo "use cfg file: $conf"
 
 	# start new
-	nohup ./$app -c $conf >>$logfile 2>&1 &
+	nohup ./$app -c $cfg >>$logfile 2>&1 &
 	local lpid=$!
 	sleep 1
 
@@ -116,7 +116,7 @@ function check_pid_number() {
 #   - start     启动服务
 #   - stop      停止服务
 #   - restart   重启服务
-#   - reload    重新加载
+#   - reload   重新加载
 #   - status    查看状态(stoped, other)
 ######################################################################
 action=$1
