@@ -103,8 +103,8 @@ func (j *Judger) doSpec(submitId int64) error {
 func (j *Judger) createDocker() {
 	bindPort := strconv.Itoa(8000 + j.id)
 	var err error
-	j.containerId, err = docker.CreateContainer("test", []string{}, bindPort)
-	//j.containerId, err = docker.CreateContainer("shiyicode/oj-judger", []string{}, bindPort)
+	//j.containerId, err = docker.CreateContainer("test", []string{}, bindPort)
+	j.containerId, err = docker.CreateContainer("shiyicode/oj-judger", []string{}, bindPort)
 	if err != nil {
 		log.Errorf("create container %s failure: ", j.containerId, err.Error())
 		return
