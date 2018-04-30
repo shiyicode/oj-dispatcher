@@ -14,7 +14,6 @@ func Logger() gin.HandlerFunc {
 		maxAge := time.Duration(conf.Log.MaxAge)
 		rotationTime := time.Duration(conf.Log.RotatTime)
 		writer := g.GetLogWriter(logPath, "access", maxAge, rotationTime)
-
 		return gin.LoggerWithWriter(writer)
 	}
 	return gin.Logger()

@@ -64,22 +64,23 @@ func (j *Judger) Do(job *Job) {
 }
 
 func (j *Judger) doDefa(submitId int64) error {
+	log.Info("id ", j.id, " submitId ", submitId)
 	cli := j.getClient()
 	resp, err := cli.Post("http://127.0.0.1:"+strconv.Itoa(8000+j.id)+"/apiv1/judge/default",
 		"application/x-www-form-urlencoded",
 		strings.NewReader("submit_id="+strconv.FormatInt(submitId, 10)))
 	if err != nil {
-		fmt.Println("请求失败:", err.Error())
+		log.Error("请求失败:", err.Error())
 		return err
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println("B:", err.Error())
+		log.Error("B:", err.Error())
 		return err
 	}
-	fmt.Println(string(body))
+	log.Info(submitId, " ", string(body))
 	var respT base.HttpResponse
 	if err := json.Unmarshal(body, &respT); err != nil {
 		return err
@@ -103,7 +104,7 @@ func (j *Judger) doSpec(submitId int64) error {
 func (j *Judger) createDocker() {
 	bindPort := strconv.Itoa(8000 + j.id)
 	var err error
-	//j.containerId, err = docker.CreateContainer("test", []string{}, bindPort)
+	//j.containerId, err = docker.CreateContainer("test", []string{"./oj-judger"}, bindPort)
 	j.containerId, err = docker.CreateContainer("shiyicode/oj-judger", []string{}, bindPort)
 	if err != nil {
 		log.Errorf("create container %s failure: ", j.containerId, err.Error())
