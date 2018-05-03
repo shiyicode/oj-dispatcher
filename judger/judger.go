@@ -48,7 +48,8 @@ func (j *Judger) Do(job *Job) {
 	case SUBMITTYPE_TEST:
 		err = j.doTest(job.SubmitId)
 	default:
-		panic("not has this submit type %s" + job.SubmitType)
+		log.Errorf("not has this submit type %s" + job.SubmitType)
+		return
 	}
 
 	if err != nil {
@@ -70,17 +71,17 @@ func (j *Judger) doDefa(submitId int64) error {
 		"application/x-www-form-urlencoded",
 		strings.NewReader("submit_id="+strconv.FormatInt(submitId, 10)))
 	if err != nil {
-		log.Error("请求失败:", err.Error())
+		log.Errorln("请求失败:", err.Error())
 		return err
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Error("B:", err.Error())
+		log.Errorln("读取响应失败：", err.Error(), resp.Body)
 		return err
 	}
-	log.Info(submitId, " ", string(body))
+	log.Infoln(submitId, " ", string(body))
 	var respT base.HttpResponse
 	if err := json.Unmarshal(body, &respT); err != nil {
 		return err
@@ -104,8 +105,8 @@ func (j *Judger) doSpec(submitId int64) error {
 func (j *Judger) createDocker() {
 	bindPort := strconv.Itoa(8000 + j.id)
 	var err error
-	//j.containerId, err = docker.CreateContainer("test", []string{"./oj-judger"}, bindPort)
-	j.containerId, err = docker.CreateContainer("shiyicode/oj-judger", []string{}, bindPort)
+	j.containerId, err = docker.CreateContainer("test", []string{"./oj-judger"}, bindPort)
+	//j.containerId, err = docker.CreateContainer("shiyicode/oj-judger", []string{}, bindPort)
 	if err != nil {
 		log.Errorf("create container %s failure: ", j.containerId, err.Error())
 		return

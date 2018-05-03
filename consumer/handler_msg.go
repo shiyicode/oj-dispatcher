@@ -25,7 +25,7 @@ func (this *Handler) HandleMessage(m *nsq.Message) error {
 		return nil
 	}
 
-	//log.Infof("consume Message from dispatch: %#v", job)
+	log.Infof("consume Message from dispatch: %#v", job)
 
 	dispatcher.AddJob(job)
 
