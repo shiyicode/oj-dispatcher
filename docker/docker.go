@@ -46,7 +46,7 @@ func CreateContainer(image string, cmd []string, bindPort string) (string, error
 						HostPort: bindPort},
 				},
 			},
-			AutoRemove: true,
+			//AutoRemove: true,
 		}, nil, "")
 	if err != nil {
 		return "", err
