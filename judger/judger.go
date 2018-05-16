@@ -91,8 +91,28 @@ func (j *Judger) doDefa(submitId int64) error {
 }
 
 func (j *Judger) doTest(submitId int64) error {
-	time.Sleep(10 * time.Second)
-	fmt.Println("dotest")
+	log.Info("id ", j.id, " submitId ", submitId)
+	cli := j.getClient()
+	resp, err := cli.Post("http://127.0.0.1:"+strconv.Itoa(8000+j.id)+"/apiv1/judge/test",
+		"application/x-www-form-urlencoded",
+		strings.NewReader("submit_id="+strconv.FormatInt(submitId, 10)))
+	if err != nil {
+		log.Errorln("请求失败:", err.Error())
+		return err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Errorln("读取响应失败：", err.Error(), resp.Body)
+		return err
+	}
+	log.Infoln(submitId, " ", string(body))
+	var respT base.HttpResponse
+	if err := json.Unmarshal(body, &respT); err != nil {
+		return err
+	}
+
 	return nil
 }
 
